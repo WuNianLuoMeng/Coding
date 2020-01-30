@@ -418,3 +418,22 @@ public int NumberOf1(int n) {
         return sum;
     }
 ~~~
+
+## 数值的整数次方
+### 方法一：对exponent进行分类讨论，主要是当exponent小于0的时候，我们需要求出base的-exponent次方的值，然后拿1除以这个结果即可。
+~~~ java
+public double Power(double base, int exponent) {
+        double ans = 1.0;
+        if (exponent >= 0) {
+            for (int i = 1; i<= exponent; i++) {
+                ans = ans * base;
+            }
+        } else {
+            for (int i = 1; i<= -exponent; i++) {   /// 注意一下exponent是一个负数
+                ans = ans * base;
+            }
+            ans = 1 / ans;
+        }
+        return ans;
+    }
+~~~
