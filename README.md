@@ -437,3 +437,48 @@ public double Power(double base, int exponent) {
         return ans;
     }
 ~~~
+
+## 调整数组顺序使奇数位于偶数前面
+### 方法一：类似于插入排序的思想，遇见奇数就将当前的奇数往前移动，知道往前移动的过程中，遇到奇数时停止移动。时间复杂度是O(n^2)
+~~~ java
+        public void reOrderArray(int [] array) {
+        int len = array.length;
+
+        for (int i = 0; i < len; i++) {
+            if (array[i] % 2 != 0) {
+                for (int j = i - 1; j >= 0; j--) {
+                    if (array[j] % 2 == 0) {
+                        int temp = array[j];
+                        array[j] = array[j + 1];
+                        array[j + 1] = temp;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+~~~
+### 方法二： 本质上就是开辟两个空间去存储奇数和偶数，最终将这两个空间中的值合并即可。时间复杂度是O(n)，但是空间复杂度比方法一要大。
+~~~ java
+public void reOrderArray(int[] array) {
+        int len = array.length;
+        ArrayList<Integer> list1 = new ArrayList<>();  /// 保存奇数
+        ArrayList<Integer> list2 = new ArrayList<>();  /// 保存偶数
+
+        for (int i = 0; i < len; i++) {
+            if (array[i] % 2 != 0) {
+                list1.add(array[i]);
+            } else {
+                list2.add(array[i]);
+            }
+        }
+        int index = 0;
+        for (int x : list1) {
+            array[index++] = x;
+        }
+        for (int x : list2) {
+            array[index++] = x;
+        }
+    }
+~~~
