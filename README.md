@@ -482,3 +482,48 @@ public void reOrderArray(int[] array) {
         }
     }
 ~~~
+## 链表中倒数第k个节点
+### 方法一：采用递归的方式去模拟链表从尾到头的这样一个方向，然后在从尾到头的过程中，去判断当前节点的位置，是否为倒数第k个即可。
+~~~ java
+private ListNode ans; /// 最终返回的结果
+    private int sum; /// 用来记录当前节点是倒数第几个节点
+
+    private void dfs(ListNode node, int k) {
+        if (node.next != null) {
+            dfs(node.next, k); /// 继续递归到下一节点。
+        }
+        // 下面这部分其实就是判断当前层的节点是倒数第几个节点。
+        sum++;
+        if (sum == k) {
+            ans = node;
+        }
+    }
+
+    public ListNode FindKthToTail(ListNode head, int k) {
+        ans = null;
+        sum = 0;
+        if (head == null) {  /// 说明链表为null，就没有必要去递归的需要了
+            return null;
+        }
+        dfs(head, k); /// 递归遍历链表
+        return ans;
+    }
+~~~
+### 方法二：通过初始化两个移动节点的位置距离为k，然后同时移动两个节点，知道第二个节点移动到链表的末尾时，移动节点1的位置就是链表倒数第k个节点。
+~~~ java
+        public ListNode FindKthToTail(ListNode head,int k) {
+        ListNode removeNode = head;
+        while (k != 0) {
+            if (removeNode == null) { /// k 大于链表的长度，直接返回null
+                return null;
+            }
+            removeNode = removeNode.next;
+            k--;
+        }
+        while (removeNode != null) {  /// 这个循环其实就是同时移动head和removeNode两个节点。
+            removeNode = removeNode.next;
+            head = head.next;
+        }
+        return head;
+    }
+~~~
