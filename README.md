@@ -676,3 +676,22 @@ private boolean judge(TreeNode node1, TreeNode node2) { /// 第二部分，匹�
         return dfs(root1, root2);
     }
 ~~~
+
+## 二叉树的镜像
+### 方法一：采用二叉树的后序遍历的方式，当对某一结点的左右孩子节点遍历完之后，那么就交换左右孩子节点。
+~~~ java
+public void Mirror(TreeNode node) {
+        if (node != null) {
+            if (node.left != null) {
+                Mirror(node.left);
+            }
+            if (node.right != null) {
+                Mirror(node.right);
+            }
+            /// 下面三行就是交换node节点的左右孩子
+            TreeNode temp = node.left;
+            node.left = node.right;
+            node.right = temp;
+        }
+    }
+~~~
