@@ -742,3 +742,43 @@ public ArrayList<Integer> printMatrix(int [][] matrix) {
         return ans;
     }
 ~~~
+## 包含min函数的栈
+### 方法一：其实就是维护两个栈，首先第一个栈是普通的数据站，跟我们平常的栈一样，存储入栈数据；第二个栈就是建立在第一个栈的基础之上，他是维护第一个栈，就是去维护第一个栈中元素的最小值。
+~~~ java
+import java.util.Stack;
+
+public class Main20 {
+    private Stack<Integer> dataStack = new Stack<>(); // 数据栈
+    private Stack<Integer> minStack = new Stack<>(); // 维护min函数的栈
+
+    public void push(int node) {
+        dataStack.push(node);
+
+        if (minStack.isEmpty() || minStack.peek() > dataStack.peek()) {
+            minStack.push(dataStack.peek()); // 当前minStack的栈顶元素大于数据栈的栈顶元素
+        } else {
+            minStack.push(minStack.peek()); // 当前minStack的栈顶元素小于数据栈的栈顶元素
+        }
+    }
+
+    public void pop() {
+        if (!dataStack.isEmpty()) {
+            dataStack.pop();
+        }
+        if (!minStack.isEmpty()) {
+            minStack.pop();
+        }
+    }
+
+    public int top() {
+        // 取出数据栈的栈顶元素
+        return dataStack.peek();
+    }
+
+    public int min() {
+        // 取出维护min函数的栈的栈顶元素
+        return minStack.peek();
+    }
+}
+
+~~~
