@@ -839,3 +839,53 @@ public ArrayList<Integer> PrintFromTopToBottom(TreeNode root) {
         return ans;
     }
 ~~~
+## 二叉搜索树的后序遍历序列
+### 方法一：主要是根据两个性质，第一个性质就是后序遍历的末尾数字是二叉树的root节点，第二个性质是二叉搜索树的性质：对于某一个节点而言，它的左子树都是小于当前节点的，右子树都是大于当前节点的。根据性质1去确定每一个节点的位置，然后根据性质2去分割后序遍历序列。
+~~~ java
+private boolean solve(ArrayList<Integer> list) {
+        // 递归终止的条件
+        if (list.size() == 0 || list.size() == 1) {
+            return true;
+        }
+        ArrayList<Integer> minList = new ArrayList<>(); // 用来保存小于endNumber数字的序列
+        ArrayList<Integer> maxList = new ArrayList<>(); // 用来保存大于endNumber数字的序列
+        int endNumber = list.get(list.size() - 1);
+        int minIndex = -1; // 用来记录minList中第一个数字的位置
+        int maxIndex = -1; // 用来记录maxList中第一个数字的位置
+        // 下面这个循环其实就是对当前list序列的一个分割(分割条件就是endNumber)
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) > endNumber) {
+                if (maxIndex == -1) {
+                    maxIndex = i;
+                }
+                maxList.add(list.get(i));
+            } else if (list.get(i) < endNumber) {
+                if (minIndex == -1) {
+                    minIndex = i;
+                }
+                minList.add(list.get(i));
+            }
+        }
+        if (minIndex != -1 && maxIndex != -1) {
+            if (minIndex > maxIndex) {
+                return false; // 本质上使右子树的序列在左子树的前面，不满足后序遍历
+            }
+            for (int i = maxIndex; i < list.size(); i++) {
+                if (list.get(i) < endNumber) {
+                    return false; // 说明在大于endNumber的序列初始位置到末尾，不连续，中间有小于endNumber的数字分割开来
+                }
+            }
+        }
+        return solve(minList) && solve(maxList); // && -> 每一个子序列都是需要满足的
+    }
+    public boolean VerifySquenceOfBST(int [] sequence) {
+        if (sequence.length == 0) {
+            return false;
+        }
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < sequence.length; i++) {
+            list.add(sequence[i]);
+        }
+        return solve(list);
+    }
+~~~
