@@ -889,3 +889,60 @@ private boolean solve(ArrayList<Integer> list) {
         return solve(list);
     }
 ~~~
+## 复杂链表的复制
+### 方法一：主要是通过去维护原链表节点和新链表节点之间的映射关系，然后在根据原链表中节点之间的连接关系去创建新链表中的节点之间的关系。空间复杂度是O(N)
+~~~ java
+    public RandomListNode Clone(RandomListNode pHead) {
+            Map<RandomListNode, RandomListNode> map = new HashMap<>();
+            RandomListNode removeNode = pHead;
+            // 去创建新链表中的节点元素和原链表节点元素与新链表节点元素之间的映射关系
+            while (removeNode != null) {
+                RandomListNode node = new RandomListNode(removeNode.label);
+                map.put(removeNode, node);
+                removeNode = removeNode.next;
+            }
+            removeNode = pHead;
+            // 去创建新链表中每个节点的结构关系(根据原链表的节点的结构关系)
+            while (removeNode != null) {
+                RandomListNode node = map.get(removeNode);
+                node.next = map.get(removeNode.next);
+                node.random = map.get(removeNode.random);
+                removeNode = removeNode.next;
+            }
+            return map.getOrDefault(pHead, null);
+        }
+~~~
+### 方法二：主要是通过创建新链表中的节点在原链表中，去优化了第一种方法的O(N)的空间复杂度，第二种方法分为三个过程，1->创建新节点以及实现新节点和元链表节点的连接，2->根据原链表的rangdom指向去生成新的节点的random的指向，3->链表的分割。
+~~~ java
+public RandomListNode Clone(RandomListNode pHead) {
+        if (pHead == null) {
+            return null;
+        }
+        // 第一个过程->创建新链表节点插入到原链表中
+        RandomListNode removeNode = pHead;
+        while (removeNode != null) {
+            RandomListNode temp = removeNode.next;
+            RandomListNode node = new RandomListNode(removeNode.label);
+            removeNode.next = node; // 原节点指向新节点
+            node.next = temp; // 新节点指向当前节点的next
+            removeNode = temp;
+        }
+        // 第二个过程->创建rangdom节点指向
+        removeNode = pHead;
+        while (removeNode != null) {
+            removeNode.next.random = removeNode.random == null ? null : removeNode.random.next;
+            removeNode = removeNode.next.next; // 用两个next是把新链表节点隔过去
+        }
+
+        // 第三个过程->链表的分割
+        removeNode = pHead;
+        RandomListNode cloneHead = pHead.next;
+        while (removeNode != null) {
+            RandomListNode node = removeNode.next;
+            removeNode.next = node.next; // 原链表中节点的结构之间关系的维护
+            node.next = node.next == null ? null : node.next.next;// 维护新链表中节点关系的维护
+            removeNode = removeNode.next;
+        }
+        return cloneHead;
+    }
+~~~
