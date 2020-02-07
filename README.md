@@ -889,6 +889,59 @@ private boolean solve(ArrayList<Integer> list) {
         return solve(list);
     }
 ~~~
+## 二叉树中和为某一值的路径
+### 方法一：通过深搜遍历二叉树节点元素，去搜索从二叉树root节点到叶子节点之间的路径的权值和是否等于target。
+~~~ java
+private ArrayList<ArrayList<Integer>> ans;
+
+    /**
+     *
+     * @param node 二叉树节点
+     * @param target 目标权值和
+     * @param sum 当前路径的权值和
+     * @param list 保存当前路径
+     */
+    private void solve(TreeNode node, int target, int sum, ArrayList<Integer> list) {
+        if (node != null) {
+            sum += node.val;
+            list.add(node.val);
+            if (node.left == null && node.right == null) {
+                if (sum == target) {
+                    ArrayList<Integer> res = new ArrayList<>(list); // ArrayList是引用传递
+                    ans.add(res);
+                }
+            } else {
+                solve(node.left, target, sum, list); // 递归左子树
+                solve(node.right, target, sum, list); // 递归右子树
+            }
+            // 消除掉当前节点对查找路径的影响 --> 至关重要
+            list.remove(list.size() - 1);
+        }
+    }
+    private void change() {
+        for (int i = 0; i < ans.size(); i++) {
+            int index = i;
+            for (int j = i + 1; j < ans.size(); j++) {
+                if (ans.get(j).size() > ans.get(index).size()) {
+                    index = j;
+                }
+            }
+            if (i != index)
+            {
+                ArrayList<Integer> temp = ans.get(i);
+                ans.set(i, ans.get(index));
+                ans.set(index, temp);
+            }
+        }
+    }
+    public ArrayList<ArrayList<Integer>> FindPath(TreeNode root, int target) {
+        ans = new ArrayList<ArrayList<Integer>>();
+        ArrayList<Integer> list = new ArrayList<>();
+        solve(root, target, 0, list);
+        change();
+        return ans;
+    }
+~~~
 ## 复杂链表的复制
 ### 方法一：主要是通过去维护原链表节点和新链表节点之间的映射关系，然后在根据原链表中节点之间的连接关系去创建新链表中的节点之间的关系。空间复杂度是O(N)
 ~~~ java
@@ -944,5 +997,44 @@ public RandomListNode Clone(RandomListNode pHead) {
             removeNode = removeNode.next;
         }
         return cloneHead;
+    }
+~~~
+## 二叉搜索树与双向链表
+### 方法一：通过对二叉搜索树的中序遍历，在遍历过程中，动态的去创建双向链表的尾部节点即可。
+~~~ java
+private TreeNode ans;  // 最终返回得双向链表得头部
+    private TreeNode removeNode; // 双向链表的尾部节点
+    // flag -> 代表的是第n层节点到达第n+1层节点的方向,0->第n+1层节点是第n层节点得左孩子，1->第n+1层节点是第n层节点得右孩子
+    private void dfs(TreeNode node, int flag) {
+        if (node.left != null) {
+            dfs(node.left, 0);
+        }
+        if (ans == null) {
+            ans = node;
+            removeNode = node;
+        } else {
+            // 做一般处理->添加边，修改边
+            if(flag == 0) {
+                removeNode.right = node; // 从尾部节点引出一条边指向当前节点，也就是说创建一条从小到大的边
+                node.left = removeNode; // 这行代码对于非root节点是没有影响的，主要是为了修改root的左孩子的指向
+            } else {
+                removeNode.right = node; // 这行代码对于非root节点是没有影响的，主要是为了修改root的右孩子的指向
+                node.left = removeNode; // 从当前节点引出一条边指向尾部节点，也就是说创建一条从大到小的边
+
+            }
+            removeNode = node; // 更新双向链表得尾部节点的值
+        }
+        if (node.right != null) {
+            dfs(node.right, 1);
+        }
+    }
+    public TreeNode Convert(TreeNode pRootOfTree) {
+        if(pRootOfTree == null) {
+            return null;
+        }
+        ans = null;
+        removeNode = null;
+        dfs(pRootOfTree, 0);
+        return ans;
     }
 ~~~
