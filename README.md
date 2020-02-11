@@ -1214,3 +1214,24 @@ public int NumberOf1Between1AndN_Solution(int n) {
         return firstBit + otherBit + NumberOf1Between1AndN_Solution(n % res);
     }
 ~~~
+## 把数组排成最小的数
+### 方法一：通过去设置一种比较优先级排序即可，优先级为：将比较的两个元素拼接的两种结果去比较大小，然后由他们的大小关系去比较所拼接元素的优先级。
+~~~ java
+public String PrintMinNumber(int [] numbers) {
+        ArrayList<String> list = new ArrayList<>();
+        for (int x : numbers) {
+            list.add(x + "");
+        }
+        list.sort((o1, o2) -> {
+            // 下面的排序规则是核心
+            String a1 = o1 + o2;
+            String a2 = o2 + o1;
+            return a1.compareTo(a2);
+        });
+        StringBuilder ans = new StringBuilder();
+        for (String x : list) {
+            ans.append(x);
+        }
+        return ans.toString();
+    }
+~~~
