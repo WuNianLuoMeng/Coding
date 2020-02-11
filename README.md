@@ -1178,3 +1178,39 @@ public int FindGreatestSumOfSubArray(int[] array) {
         return Max;
     }
 ~~~
+## 整数中1出现的次数
+### 方法一：暴力1-n个数字即可。时间复杂度O(n*log(n))
+~~~ java
+public int NumberOf1Between1AndN_Solution(int n) {
+        int sum = 0;
+        for (int i = 1; i <= n; i++) {
+            int x = i;
+            while (x != 0) {
+                if (x % 10 == 1) {
+                    sum++;
+                }
+                x = x / 10;
+            }
+        }
+        return sum;
+    }
+~~~
+### 方法二：通过对1-n的分区间讨论(递归的过程)，在求1-n的时候，分为两个区间，第一个区间是1-b(b是n去掉首部数字之后的数字)， 第二个区间是（b+1, n）。对于每个区间的计算时，分为了两种情况，第一种情况是当前n的首部数字是1，第二种情况是除了首位的其他位是1。主要是这两中情乱的讨论。
+~~~ java
+public int NumberOf1Between1AndN_Solution(int n) {
+        if (n == 0) {
+            return 0;
+        }
+        String str = "" + n;
+        int len = str.length();
+        if (len == 1) {
+            return 1;
+        }
+        int res = (int) Math.pow(10, len - 1); // 是获取当前n的幂级
+//        int firstNumber = str.charAt(0) - '0';
+        int firstNumber = n / res;
+        int firstBit = firstNumber == 1 ? (n % res) + 1 : res;
+        int otherBit = (len - 1) * firstNumber * res / 10; //(len - 1)的意思就是剩余位的个数(C(len-1, 1) -> 从剩余的len-1位中选取一位来作为1)，res/10的意思就是剩余的len-2位可能出现的情况
+        return firstBit + otherBit + NumberOf1Between1AndN_Solution(n % res);
+    }
+~~~
