@@ -1235,3 +1235,29 @@ public String PrintMinNumber(int [] numbers) {
         return ans.toString();
     }
 ~~~
+## 丑数
+### 方法一：就是说通过去根据2*丑数，3*丑数，5*丑数这三个队列去判断出当前位置的值，然后去更新遍历这三个队列下标的值即可
+~~~ java
+public int GetUglyNumber_Solution(int index) {
+        int[] a = new int[index];
+        a[0] = 1;
+        int index1 = 0; // 遍历丑数*2的队列
+        int index2 = 0; // 遍历丑数*3的队列
+        int index3 = 0; // 遍历丑数*5的队列
+
+        for (int i = 1; i < index; i++) {
+            a[i] = Math.min(Math.min(a[index1] * 2, a[index2] * 3) , a[index3] * 5);
+            // 根据放在第i个位置上的数字更新遍历三个队列的下标
+            if (a[i] == a[index1] * 2) {
+                index1++;
+            }
+            if (a[i] == a[index2] * 3) {
+                index2++;
+            }
+            if (a[i] == a[index3] * 5) {
+                index3++;
+            }
+        }
+        return a[index - 1];
+    }
+~~~
