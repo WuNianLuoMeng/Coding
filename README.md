@@ -1261,3 +1261,19 @@ public int GetUglyNumber_Solution(int index) {
         return a[index - 1];
     }
 ~~~
+## 第一个只出现一次的字符位置
+### 方法一：通过map结构去保存每个字符出现的次数，然后再对字符进行遍历判断即可。
+~~~ java
+public int FirstNotRepeatingChar(String str) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (int  i = 0; i < str.length(); i++) {
+            map.put(str.charAt(i), map.getOrDefault(str.charAt(i), 0) + 1);
+        }
+        for (int i = 0; i < str.length(); i++) {
+            if (map.get(str.charAt(i)) == 1) {
+                return i;
+            }
+        }
+        return -1;
+    }
+~~~
