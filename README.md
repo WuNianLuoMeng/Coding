@@ -1448,3 +1448,13 @@ private int findFirstPosition(int[] array, int k) {
         return lastPosition - firstPosition + 1;
     }
 ~~~
+## 二叉树的深度
+### 方法一：通过递归去求解从每一个节点的左右孩子节点的出发到叶子节点的节点个数，去推断出当前节点到叶子节点的节点个数
+~~~ java
+public int TreeDepth(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        return Math.max(TreeDepth(node.left), TreeDepth(node.right)) + 1; // + 1就是当前node对路径产生的影响
+    }
+~~~
