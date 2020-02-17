@@ -1634,3 +1634,16 @@ public String ReverseSentence(String str) {
         return ans.toString();
     }
 ~~~
+## 左旋转字符串
+### 方法一：通过两次翻转，第一次翻转使得两个子序列处于最终的位置，第二次翻转为了消除第一次翻转的时候对每一个子序列产生的影响。
+~~~ java
+public String LeftRotateString(String str,int n) {
+        if (str.length() == 0) {
+            return "";
+        }
+        StringBuilder flipStr = new StringBuilder(str).reverse(); // 第一次翻转
+        String str1 = flipStr.substring(0, flipStr.length() - n); // 取出第一个子序列
+        String str2 = flipStr.substring(flipStr.length() - n); // 取出第二个子序列
+        return new StringBuilder(str1).reverse().append(new StringBuilder(str2).reverse()).toString(); // 第二次翻转
+    }
+~~~
