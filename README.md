@@ -1615,3 +1615,22 @@ public ArrayList<ArrayList<Integer> > FindContinuousSequence(int sum) {
         return x - res <= 0.00000001;
     }
 ~~~
+## 翻转单词序列
+### 方法一：通过两次翻转，第一次翻转使得每一个单词处于最终的位置，第二次翻转为了消除第一次翻转的时候对每一个单词产生的影响。
+~~~ java
+public String ReverseSentence(String str) {
+        String flipStr = new StringBuilder(str).reverse().toString(); // 第一次翻转
+        StringBuilder res = new StringBuilder(); // 用来遍历每一个单词
+        StringBuilder ans = new StringBuilder(); // 用来保存结果
+        for (int i = 0; i < flipStr.length(); i++) {
+            if (flipStr.charAt(i) == ' ') {
+                ans.append(res.reverse().toString()).append(" "); // 第二次翻转
+                res = new StringBuilder();
+            } else {
+                res.append(flipStr.charAt(i));
+            }
+        }
+        ans.append(res.reverse().toString()); // 最后那个单词的翻转结果保存到ans当中
+        return ans.toString();
+    }
+~~~
