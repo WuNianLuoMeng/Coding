@@ -1647,3 +1647,73 @@ public String LeftRotateString(String str,int n) {
         return new StringBuilder(str1).reverse().append(new StringBuilder(str2).reverse()).toString(); // 第二次翻转
     }
 ~~~
+## 扑克牌顺子
+### 方法一：先去统计出数组中0的个数，然后在对数组排序，最后判断数组中相邻两个位置之间是否需要0填充以及0的个数是否够用即可。
+~~~ java
+public boolean isContinuous(int [] numbers) {
+        if (numbers.length == 0) {
+            return false;
+        }
+        int sum = 0;
+        for (int x : numbers) {
+            if (x == 0) {
+                sum++;
+            }
+        }
+        Arrays.sort(numbers);
+        for (int i = sum + 1; i < numbers.length; i++) {
+            sum -= numbers[i] - numbers[i - 1] - 1;
+            if (sum < 0 || numbers[i] == numbers[i - 1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+~~~
+## 孩子们的游戏(圆圈中最后剩下的数)
+### 方法一：模拟每一个学生的被移除的过程，通过一个vis数组来去标记已经移除过的学生的位置。
+~~~ java
+    public static int LastRemaining_Solution(int n, int m) {
+        if (n == 0 || m == 0) {
+            return -1;
+        }
+        boolean[] vis = new boolean[n]; // vis[i] = true代表第i个小朋友移除圆桌
+        int sum = 0; // 用来记录当前已经移除的人数总和
+        int res = 0; // 用来记录某一次循环的过程中已经计数人数的个数
+        int index = 0;
+        while (sum < n - 1) {
+            res = 0;
+            // 在某一次循环中，让index处于没有被移除的学生位置
+            while (vis[index]) {
+                index = (index + 1) % n;
+            }
+            // 模拟找第m个位置的学生
+            while (res < m) {
+                if(!vis[index]) {
+                    res++;
+                }
+                index = (index + 1) % n;
+            }
+            vis[(index + n - 1) % n] = true; // 标记当前循环移除的学生位置的下标
+            sum++;
+        }
+        // 在返回结果时，让index处于没有被移除的学生位置
+        while (vis[index]) {
+            index = (index + 1) % n;
+        }
+        return index;
+    }
+~~~
+### 方法二：通过公式的推导可以推导出：f(n, m) = (f(n-1, m) + m) % n
+~~~ java
+    public int LastRemaining_Solution(int n, int m) {
+        if (n == 0 || m == 0) {
+            return -1;
+        }
+        int ans = 0;
+        for (int i = 2; i <= n; i++) {
+            ans = (ans + m) % i;
+        }
+        return ans;
+    }
+~~~
