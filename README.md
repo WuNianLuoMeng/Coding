@@ -1717,3 +1717,12 @@ public boolean isContinuous(int [] numbers) {
         return ans;
     }
 ~~~
+## 求1+2+3+4+...+n
+### 方法一:采用递归地方式，去求出等差数列的前n项和，只不过递归终止的条件是通过&&原酸来去写的
+~~~ java
+    public int Sum_Solution(int n) {
+        int sum = n;
+        boolean flag = (n > 0) && (sum += Sum_Solution(n - 1)) > 0;
+        return sum;
+    }
+~~~
