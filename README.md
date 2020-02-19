@@ -1726,3 +1726,17 @@ public boolean isContinuous(int [] numbers) {
         return sum;
     }
 ~~~
+## 不用加减乘除做加法
+### 方法一：将两个数字象加分为两个步骤：第一步统计两个数字每一位的相加结果(不计算进位情况)， 第二步计算两个数字的进位结果，然后把这两步的结果在进行前面所说的两步操作，直到进位结果为0即可
+~~~ java
+public int Add(int num1,int num2) {
+        int sum1, sum2;
+        do{
+            sum1 = num1 ^ num2;
+            sum2 = (num1 & num2) << 1;
+            num1 = sum1;
+            num2 = sum2;
+        }while (num2 != 0);
+        return num1;
+    }
+~~~
