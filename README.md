@@ -1792,3 +1792,24 @@ public static int StrToInt(String str) {
         }
     }
 ~~~
+## 数组中重复的数字
+### 方法一：通过维护 nums[nums[i]] = nums[i]这个关系式，在对当前位置的数字进行遍历时，判断当前位置的数字是否满足前面的不等式，如果满足，说明当前的数字存在的次数超过1次(只有前面的维护过程中才能使得当前的数字满足等式)。
+~~~ java
+public static int findRepeatNumber(int[] nums) {
+        int ans = -1;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == i) {
+                continue; // 不需要去维护index和index对应的值相等的关系
+            }
+            if (nums[nums[i]] == nums[i]) {
+                ans = nums[i];
+                break;
+            }
+            // 下面的三行是交换两个数字，目的是为了维护 nums[nums[i]] = nums[i]
+            int temp = nums[i];
+            nums[i] = nums[nums[i]];
+            nums[temp] = temp;
+        }
+        return ans;
+    }
+~~~
