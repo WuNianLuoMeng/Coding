@@ -1920,3 +1920,18 @@ public static int[] multiply(int[] A) {
         return solve(s1.toString(), s2.toString(), 0, 0);
     }
 ~~~
+## 表示数值的字符串
+### 方法一：通过调用Double类的转换成Double类型的方法，判断转换的过程当中是否抛出异常即可。
+~~~ java
+ public boolean isNumber(String s) {
+        if (s.endsWith("f") || s.endsWith("d") || s.endsWith("F") || s.endsWith("D")) {
+            return false;
+        }
+        try {
+            Double.parseDouble(s);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+~~~
