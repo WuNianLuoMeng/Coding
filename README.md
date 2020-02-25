@@ -1959,3 +1959,20 @@ private Map<Character, Integer> map = new HashMap<>(); // 保存每个字符出�
         return '#';
     }
 ~~~
+## 链表中环的入口结点
+### 方法一：通过Map结构保存链表中每个节点出现的次数，第一次出现两次的节点就是我们所要找的环的入口结点，如果没有找到，返回null
+~~~ java
+public ListNode EntryNodeOfLoop(ListNode pHead)
+    {
+        Map<ListNode, Integer> map = new HashMap<>();
+        ListNode node =  pHead;
+        while (node != null) {
+            map.put(node, map.getOrDefault(node, 0) + 1);
+            if (map.get(node) == 2) {
+                return node;
+            }
+            node = node.next;
+        }
+        return null;
+    }
+~~~
