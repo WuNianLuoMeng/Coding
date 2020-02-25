@@ -2018,3 +2018,37 @@ private ListNode change(ListNode x) {
         return ans;
     }
 ~~~
+## 二叉树中的下一个节点
+### 方法一：主要是分为三种情况，第一种情况就是pNode节点有右孩子时，那么pNode的下一个节点就是右孩子对应的那颗子树的最左侧的节点；如果说当前节点的右孩子为空，并且pNode是pNode父亲节点的左孩子，那么直接返回pNode的父亲节点即可；如果说当前节点的右孩子为空，并且pNode是pNode父亲节点的右孩子那么就返回pNode节点的爷爷节点。当然还有些特殊情况，比如说：二叉树的最右侧节点的判断，以及父亲节点是否为空的判断。
+~~~ java
+public TreeLinkNode GetNext(TreeLinkNode pNode) {
+        if (pNode.right != null) {
+            // 第一种情况，pNode节点的右孩子不为空
+            pNode = pNode.right;
+            while (pNode.left != null) {
+                pNode = pNode.left;
+            }
+            return pNode;
+        } else {
+            TreeLinkNode tempNode = pNode.next;
+            if (tempNode == null) {
+                return null;
+            }
+            if (tempNode.left == pNode) {
+                // 第二种情况，当前节点右孩子为空，并且当前节点是父亲节点的左孩子
+                return tempNode;
+            } else {
+                // 第二种情况，当前节点右孩子为空，并且当前节点是父亲节点的右孩子
+                boolean flag = false;
+                while (tempNode.next != null) {
+                    if (tempNode.next.left == tempNode) {
+                        flag = true;
+                        break;
+                    }
+                    tempNode = tempNode.next;
+                }
+                return flag ? tempNode.next : null; // flag尾true时，说明pNode所指的节点不是二叉树中最右侧节点
+            }
+        }
+    }
+~~~
