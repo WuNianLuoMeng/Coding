@@ -1020,7 +1020,6 @@ private TreeNode ans;  // 最终返回得双向链表得头部
             } else {
                 removeNode.right = node; // 这行代码对于非root节点是没有影响的，主要是为了修改root的右孩子的指向
                 node.left = removeNode; // 从当前节点引出一条边指向尾部节点，也就是说创建一条从大到小的边
-
             }
             removeNode = node; // 更新双向链表得尾部节点的值
         }
@@ -1933,5 +1932,30 @@ public static int[] multiply(int[] A) {
             return false;
         }
         return true;
+    }
+~~~
+## 字符流中第一个不重复的字符
+### 方法一：由于字符流是不固定的，所以可以通过一个Map结构来去保存每一个字符出现的次数即可。
+~~~ java
+private Map<Character, Integer> map = new HashMap<>(); // 保存每个字符出现的次数
+    private StringBuilder str = new StringBuilder(); // 保存字符流
+    private int index = 0; // 用来保存字符只出现一次的第一个位置
+
+    //Insert one char from stringstream
+    public void Insert(char ch)
+    {
+        str.append(ch);
+        map.put(ch, map.getOrDefault(ch, 0) + 1);
+    }
+    //return the first appearence once char in current stringstream
+    public char FirstAppearingOnce()
+    {
+        while (index < str.length()) {
+            if (map.get(str.charAt(index)) == 1) {
+                return str.charAt(index);
+            }
+            index++;
+        }
+        return '#';
     }
 ~~~
