@@ -2052,3 +2052,26 @@ public TreeLinkNode GetNext(TreeLinkNode pNode) {
         }
     }
 ~~~
+## 对称的二叉树
+### 方法一：通过定义连个变量去遍历root节点对应的两个子树种的对应位置的节点是否相同即可。
+~~~ java
+public boolean isSymmetrical(TreeNode pRoot) {
+        if (pRoot == null) {
+            return true;
+        }
+        return solve(pRoot.left, pRoot.right);
+    }
+
+    private boolean solve(TreeNode node1, TreeNode node2) {
+        if (node1 == null && node2 == null) {
+            return true;
+        }
+        if (node1 == null || node2 == null) {
+            return false;
+        }
+        if (node1.val != node2.val) {
+            return false;
+        }
+        return solve(node1.left, node2.right) && solve(node1.right, node2.left);
+    }
+~~~
