@@ -2313,3 +2313,41 @@ private PriorityQueue<Integer> queue1 = new PriorityQueue<>(((o1, o2) -> (o2 - o
         }
     }
 ~~~
+## 滑动窗口的最大值
+### 方法一：通过记录之前保存的窗口中的最大值和最大值的下标来去更新当前窗口的最大值，分为两种情况，第一种情况：之前最大值还在当前数组中，那么就去比较当前区间的右端点和之前记录的最大值即可。第二种情况：之前保存的最大值不在当前区间，那么就从当前区间的左端点遍历到右端点在重新的找到一个最大值就行了
+~~~ java
+    public static ArrayList<Integer> maxInWindows(int[] num, int size) {
+        ArrayList<Integer> ans = new ArrayList<>();
+        if (num.length == 0 || size == 0 || size > num.length) {
+            return ans;
+        }
+
+        int Max = Integer.MIN_VALUE;
+        int pos = -1;
+        for (int i = 0; i < size; i++) {
+            if (num[i] > Max) {
+                Max = num[i];
+                pos = i;
+            }
+        }
+        ans.add(Max);
+        for (int i = size; i <= num.length - 1; i++) { // i - > 窗口的右区间
+            if (i - size + 1 <= pos) {
+                if (num[i] > Max) {
+                    Max = num[i];
+                    pos = i;
+                }
+            } else {
+                Max = Integer.MIN_VALUE;
+                for (int j = i - size + 1; j <= i; j++) {
+                    if (num[j] > Max) {
+                        Max = num[j];
+                        pos = j;
+                    }
+                }
+            }
+            ans.add(Max);
+        }
+        return ans;
+    }
+~~~
