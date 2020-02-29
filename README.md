@@ -2459,3 +2459,25 @@ private int sum;
         return res;
     }
 ~~~
+## 剪绳子
+### 方法一：动态转移的方程为：dp[n] = dp[n - i] * dp[i]，枚举i即可(1~n/2)
+~~~ java
+public int cutRope(int n) {
+        int[] dp = new int[n + 1];
+        if (n == 2) {
+            return 1;
+        }
+        if (n == 3) {
+            return 2; // 1 + 2
+        }
+        dp[1] = 1;
+        dp[2] = 2;
+        dp[3] = 3; // 1 + 2
+        for (int k = 1; k <= n; k++) {
+            for (int i = 1; i <= k / 2; i++) {
+                dp[k] = Math.max(dp[k], dp[i] * dp[k - i]);
+            }
+        }
+        return dp[n];
+    }
+~~~
