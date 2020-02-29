@@ -2251,3 +2251,33 @@ public static String serialize(TreeNode root) {
     }
 
 ~~~
+## 二叉搜索树的第k个节点
+### 方法一：通过对二叉搜索树的一个中序遍历即可，在遍历节点的过程中，判断当前遍历的节点是否为第k个节点就行了
+~~~ java
+private TreeNode ans;
+    private int index;
+
+    public TreeNode KthNode(TreeNode pRoot, int k) {
+        index = 1;
+        ans = null;
+        if (k != 0 && pRoot != null) {
+            solve(pRoot, k);
+        }
+        return ans;
+    }
+
+    private void solve(TreeNode node, int k) {
+        if (ans == null) {
+            if (node.left != null) {
+                solve(node.left, k);
+            }
+            if (index == k) {
+                ans = node;
+            }
+            index++;
+            if (node.right != null) {
+                solve(node.right, k);
+            }
+        }
+    }
+~~~ 
